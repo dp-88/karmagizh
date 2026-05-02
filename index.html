@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karmagizh | Creative Kid</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&family=Caveat:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Baloo 2', cursive; background-color: #fffde7; }
+    .caveat { font-family: 'Caveat', cursive; }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-4deg); }
+      50%       { transform: rotate(4deg); }
+    }
+    .wiggle { animation: wiggle 2.5s ease-in-out infinite; }
+
+    @keyframes buzz {
+      0%   { transform: translate(0,0) rotate(0deg); }
+      25%  { transform: translate(6px,-6px) rotate(20deg); }
+      50%  { transform: translate(-6px,4px) rotate(-15deg); }
+      75%  { transform: translate(4px,6px) rotate(10deg); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
+    .buzz { animation: buzz 0.35s linear infinite; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); opacity: 0.5; }
+      50%       { transform: translateY(-12px); opacity: 1; }
+    }
+    .float1 { animation: float 2.2s ease-in-out infinite; }
+    .float2 { animation: float 2.8s ease-in-out infinite 0.4s; }
+    .float3 { animation: float 3.1s ease-in-out infinite 0.8s; }
+
+    @keyframes brickbounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+    .brickbounce { animation: brickbounce 1.8s ease-in-out infinite; }
+
+    .card {
+      border: 3px solid #1f2937;
+      box-shadow: 4px 4px 0 #1f2937;
+      transition: transform 0.15s;
+    }
+    .card:hover { transform: translateY(-4px); }
+
+    .fact-card {
+      border: 3px solid #1f2937;
+      box-shadow: 3px 3px 0 #1f2937;
+    }
+
+    /* nav underline */
+    nav a { position: relative; }
+    nav a::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 3px;
+      background: #1f2937;
+      transition: width 0.2s;
+    }
+    nav a:hover::after { width: 100%; }
+  </style>
+</head>
+
+<body class="overflow-x-hidden text-gray-800">
+
+  <!-- ── NAV ── -->
+  <nav class="sticky top-0 z-50 bg-[#FFF44F] border-b-4 border-gray-800 px-4 py-3 flex items-center justify-between">
+    <span class="font-extrabold text-xl tracking-tight">🧱 Karmagizh</span>
+    <div class="flex gap-5 caveat text-lg">
+      <a href="#about"    class="hover:text-yellow-700 font-bold">About</a>
+      <a href="#hobbies"  class="hover:text-yellow-700 font-bold">Hobbies</a>
+      <a href="#creations"class="hover:text-yellow-700 font-bold">Creations</a>
+      <a href="#facts"    class="hover:text-yellow-700 font-bold">Fun Facts</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="min-h-screen bg-[#FFF44F] flex flex-col items-center justify-center px-4 py-16 relative overflow-hidden">
+
+    <!-- bg lego bricks -->
+    <span class="absolute top-6  left-4  text-7xl opacity-10 select-none">🧱</span>
+    <span class="absolute top-24 right-6 text-6xl opacity-10 select-none">🧱</span>
+    <span class="absolute bottom-24 left-10 text-5xl opacity-10 select-none">🧱</span>
+    <span class="absolute bottom-8 right-8  text-7xl opacity-10 select-none">🧱</span>
+    <span class="absolute top-40 left-1/2 -translate-x-1/2 text-9xl opacity-5 select-none">🧱</span>
+
+    <!-- AVATAR -->
+    <div class="relative wiggle mb-6">
+      <svg width="210" height="230" viewBox="0 0 210 230" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- wild messy hair strands -->
+        <line x1="62"  y1="60"  x2="38"  y2="18"  stroke="#3b1f00" stroke-width="9"  stroke-linecap="round"/>
+        <line x1="75"  y1="48"  x2="58"  y2="8"   stroke="#3b1f00" stroke-width="8"  stroke-linecap="round"/>
+        <line x1="90"  y1="40"  x2="80"  y2="2"   stroke="#3b1f00" stroke-width="9"  stroke-linecap="round"/>
+        <line x1="105" y1="36"  x2="105" y2="0"   stroke="#3b1f00" stroke-width="10" stroke-linecap="round"/>
+        <line x1="120" y1="40"  x2="130" y2="2"   stroke="#3b1f00" stroke-width="8"  stroke-linecap="round"/>
+        <line x1="135" y1="48"  x2="152" y2="10"  stroke="#3b1f00" stroke-width="9"  stroke-linecap="round"/>
+        <line x1="148" y1="60"  x2="168" y2="26"  stroke="#3b1f00" stroke-width="8"  stroke-linecap="round"/>
+        <!-- extra sideways chaos strands -->
+        <line x1="68"  y1="50"  x2="40"  y2="42"  stroke="#3b1f00" stroke-width="6"  stroke-linecap="round"/>
+        <line x1="142" y1="50"  x2="170" y2="42"  stroke="#3b1f00" stroke-width="6"  stroke-linecap="round"/>
+        <line x1="58"  y1="55"  x2="30"  y2="60"  stroke="#3b1f00" stroke-width="5"  stroke-linecap="round"/>
+
+        <!-- hair base blob -->
+        <ellipse cx="105" cy="68" rx="56" ry="42" fill="#3b1f00"/>
+
+        <!-- face -->
+        <ellipse cx="105" cy="120" rx="57" ry="62" fill="#FDBCB4"/>
+
+        <!-- ears -->
+        <ellipse cx="48"  cy="118" rx="13" ry="16" fill="#FDBCB4"/>
+        <ellipse cx="162" cy="118" rx="13" ry="16" fill="#FDBCB4"/>
+        <!-- dirt in ears -->
+        <ellipse cx="48"  cy="118" rx="7"  ry="9"  fill="#8B6914" opacity="0.45"/>
+        <ellipse cx="162" cy="118" rx="7"  ry="9"  fill="#8B6914" opacity="0.35"/>
+
+        <!-- dirt patches on face -->
+        <ellipse cx="68"  cy="104" rx="14" ry="9"  fill="#8B6914" opacity="0.45"/>
+        <ellipse cx="148" cy="135" rx="11" ry="7"  fill="#8B6914" opacity="0.40"/>
+        <ellipse cx="118" cy="93"  rx="8"  ry="5"  fill="#C4A35A" opacity="0.50"/>
+        <circle  cx="78"  cy="145" r="6"            fill="#8B6914" opacity="0.38"/>
+        <ellipse cx="95"  cy="155" rx="9"  ry="5"  fill="#C4A35A" opacity="0.35"/>
+
+        <!-- eyes whites -->
+        <ellipse cx="84"  cy="108" rx="15" ry="15" fill="white"/>
+        <ellipse cx="126" cy="108" rx="15" ry="15" fill="white"/>
+        <!-- irises -->
+        <circle  cx="87"  cy="111" r="9"            fill="#3b1f00"/>
+        <circle  cx="129" cy="111" r="9"            fill="#3b1f00"/>
+        <!-- pupils -->
+        <circle  cx="88"  cy="112" r="4"            fill="black"/>
+        <circle  cx="130" cy="112" r="4"            fill="black"/>
+        <!-- eye glints -->
+        <circle  cx="91"  cy="109" r="2.5"          fill="white"/>
+        <circle  cx="133" cy="109" r="2.5"          fill="white"/>
+
+        <!-- messy eyebrows -->
+        <path d="M68 91 Q84 83 95 91"  stroke="#3b1f00" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <path d="M115 91 Q126 83 142 91" stroke="#3b1f00" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+
+        <!-- nose -->
+        <ellipse cx="105" cy="128" rx="9" ry="7" fill="#F09090"/>
+
+        <!-- big smile -->
+        <path d="M82 148 Q105 168 128 148" stroke="#3b1f00" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- missing-tooth gap -->
+        <rect x="101" y="148" width="8" height="11" fill="#3b1f00" rx="1"/>
+
+        <!-- neck -->
+        <rect x="88" y="174" width="34" height="28" rx="4" fill="#FDBCB4"/>
+        <!-- neck dirt -->
+        <ellipse cx="105" cy="184" rx="10" ry="5" fill="#8B6914" opacity="0.30"/>
+
+        <!-- shirt (messy orange with stains) -->
+        <path d="M28 198 Q52 180 88 178 L105 228 L122 178 Q158 180 182 198 L182 228 L28 228 Z" fill="#FF6B35"/>
+        <!-- shirt stains -->
+        <ellipse cx="82"  cy="206" rx="14" ry="9"  fill="#8B6914" opacity="0.50"/>
+        <ellipse cx="128" cy="212" rx="9"  ry="6"  fill="#5a3a00" opacity="0.35"/>
+        <circle  cx="105" cy="200" r="5"            fill="#c0392b" opacity="0.45"/>
+
+      </svg>
+
+      <!-- buzzing fly -->
+      <div class="absolute -top-1 right-1 buzz text-xl select-none">🪰</div>
+
+      <!-- stink lines -->
+      <span class="absolute top-10 left-0 caveat text-yellow-700 font-bold text-sm float1 select-none">~</span>
+      <span class="absolute top-6  left-3 caveat text-yellow-600 font-bold text-base float2 select-none">~~</span>
+      <span class="absolute top-14 left-1 caveat text-yellow-500 font-bold text-xs float3 select-none">~</span>
+    </div>
+
+    <!-- name -->
+    <h1 class="text-5xl sm:text-7xl font-extrabold text-center tracking-tight leading-tight text-gray-900 drop-shadow-sm">
+      KARMAGIZH
+    </h1>
+
+    <!-- tagline -->
+    <p class="caveat text-2xl sm:text-3xl text-gray-700 mt-3 text-center">
+      Creative Kid &bull; 3rd Grader &bull; Lego Master 🧱
+    </p>
+
+    <!-- school badge -->
+    <div class="mt-6 bg-white rounded-full px-6 py-3 card caveat text-xl text-gray-800 inline-flex items-center gap-2">
+      📍 Primrose Schools
+    </div>
+
+    <div class="absolute bottom-8 caveat text-gray-700 text-lg animate-bounce select-none">
+      scroll down ↓
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section class="py-16 px-4 bg-white" id="about">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-4xl font-extrabold text-center mb-1">👋 About Me</h2>
+      <p class="caveat text-center text-gray-400 text-xl mb-10">the important stuff</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div class="bg-[#FFF44F] rounded-2xl p-4 text-center card">
+          <div class="text-4xl mb-2">🎓</div>
+          <div class="font-bold text-xs uppercase tracking-wide text-gray-500">Grade</div>
+          <div class="caveat text-xl font-bold">3rd Standard</div>
+        </div>
+        <div class="bg-[#FFF44F] rounded-2xl p-4 text-center card">
+          <div class="text-4xl mb-2">💛</div>
+          <div class="font-bold text-xs uppercase tracking-wide text-gray-500">Fav Color</div>
+          <div class="caveat text-xl font-bold">Yellow!</div>
+        </div>
+        <div class="bg-[#FFF44F] rounded-2xl p-4 text-center card">
+          <div class="text-4xl mb-2 brickbounce inline-block">🧱</div>
+          <div class="font-bold text-xs uppercase tracking-wide text-gray-500">Superpower</div>
+          <div class="caveat text-xl font-bold">Lego Building</div>
+        </div>
+        <div class="bg-[#FFF44F] rounded-2xl p-4 text-center card">
+          <div class="text-4xl mb-2">🏫</div>
+          <div class="font-bold text-xs uppercase tracking-wide text-gray-500">School</div>
+          <div class="caveat text-xl font-bold">Primrose</div>
+        </div>
+      </div>
+
+      <div class="bg-[#FFFDE7] rounded-2xl p-6 card">
+        <p class="caveat text-2xl text-center text-gray-700 leading-relaxed">
+          "Hi! I'm Karmagizh. I love building epic things with Lego and using my imagination.
+          I go to Primrose Schools and I'm in 3rd grade.
+          Baths are optional. Creativity is not." 😄
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOBBIES ── -->
+  <section class="py-16 px-4 bg-[#FFF44F]" id="hobbies">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-4xl font-extrabold text-center mb-1">🎮 What I Love</h2>
+      <p class="caveat text-center text-gray-600 text-xl mb-10">my top interests</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl p-6 text-center card">
+          <div class="text-6xl mb-4 brickbounce inline-block">🧱</div>
+          <h3 class="text-xl font-extrabold">Lego Building</h3>
+          <p class="caveat text-gray-500 mt-2 text-lg">One brick at a time — world domination</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 text-center card">
+          <div class="text-6xl mb-4">🎨</div>
+          <h3 class="text-xl font-extrabold">Being Creative</h3>
+          <p class="caveat text-gray-500 mt-2 text-lg">Making stuff nobody has made before</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 text-center card">
+          <div class="text-6xl mb-4">🌟</div>
+          <h3 class="text-xl font-extrabold">Just Chilling</h3>
+          <p class="caveat text-gray-500 mt-2 text-lg">Avoiding baths is a full-time hobby 😂</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CREATIONS ── -->
+  <section class="py-16 px-4 bg-white" id="creations">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-4xl font-extrabold text-center mb-1">🖼️ My Creations</h2>
+      <p class="caveat text-center text-gray-400 text-xl mb-10">things I made — more dropping soon!</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <!-- placeholders — swap src with real images when ready -->
+        <div class="aspect-square bg-[#FFFDE7] rounded-2xl border-4 border-dashed border-yellow-400 flex flex-col items-center justify-center text-gray-400 hover:bg-[#FFF44F] transition-colors cursor-pointer">
+          <div class="text-4xl mb-2">🖼️</div>
+          <p class="caveat text-base text-center px-2">Artwork<br/>coming soon!</p>
+        </div>
+        <div class="aspect-square bg-[#FFFDE7] rounded-2xl border-4 border-dashed border-yellow-400 flex flex-col items-center justify-center text-gray-400 hover:bg-[#FFF44F] transition-colors cursor-pointer">
+          <div class="text-4xl mb-2">🧱</div>
+          <p class="caveat text-base text-center px-2">Lego build<br/>coming soon!</p>
+        </div>
+        <div class="aspect-square bg-[#FFFDE7] rounded-2xl border-4 border-dashed border-yellow-400 flex flex-col items-center justify-center text-gray-400 hover:bg-[#FFF44F] transition-colors cursor-pointer">
+          <div class="text-4xl mb-2">✏️</div>
+          <p class="caveat text-base text-center px-2">Drawing<br/>coming soon!</p>
+        </div>
+        <div class="aspect-square bg-[#FFFDE7] rounded-2xl border-4 border-dashed border-yellow-400 flex flex-col items-center justify-center text-gray-400 hover:bg-[#FFF44F] transition-colors cursor-pointer">
+          <div class="text-4xl mb-2">🌈</div>
+          <p class="caveat text-base text-center px-2">Something<br/>cool!</p>
+        </div>
+        <div class="aspect-square bg-[#FFFDE7] rounded-2xl border-4 border-dashed border-yellow-400 flex flex-col items-center justify-center text-gray-400 hover:bg-[#FFF44F] transition-colors cursor-pointer">
+          <div class="text-4xl mb-2">🚀</div>
+          <p class="caveat text-base text-center px-2">Surprise<br/>creation!</p>
+        </div>
+        <div class="aspect-square bg-[#FFFDE7] rounded-2xl border-4 border-dashed border-yellow-400 flex flex-col items-center justify-center text-gray-400 hover:bg-[#FFF44F] transition-colors cursor-pointer">
+          <div class="text-4xl mb-2">⭐</div>
+          <p class="caveat text-base text-center px-2">Watch<br/>this space!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FUN FACTS ── -->
+  <section class="py-16 px-4 bg-[#FFF44F]" id="facts">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-4xl font-extrabold text-center mb-1">⚡ Fun Facts</h2>
+      <p class="caveat text-center text-gray-600 text-xl mb-10">things you should know about me</p>
+
+      <div class="space-y-4">
+        <div class="bg-white rounded-2xl px-6 py-4 fact-card flex items-center gap-4">
+          <span class="text-3xl shrink-0">🧱</span>
+          <p class="caveat text-xl">I can build Lego for hours without stopping</p>
+        </div>
+        <div class="bg-white rounded-2xl px-6 py-4 fact-card flex items-center gap-4">
+          <span class="text-3xl shrink-0">💛</span>
+          <p class="caveat text-xl">Yellow is the best color. No debate.</p>
+        </div>
+        <div class="bg-white rounded-2xl px-6 py-4 fact-card flex items-center gap-4">
+          <span class="text-3xl shrink-0">🚿</span>
+          <p class="caveat text-xl">Baths? Never heard of them. 😂</p>
+        </div>
+        <div class="bg-white rounded-2xl px-6 py-4 fact-card flex items-center gap-4">
+          <span class="text-3xl shrink-0">🏫</span>
+          <p class="caveat text-xl">Primrose Schools is where the magic happens</p>
+        </div>
+        <div class="bg-white rounded-2xl px-6 py-4 fact-card flex items-center gap-4">
+          <span class="text-3xl shrink-0">🎨</span>
+          <p class="caveat text-xl">Creativity level: completely off the charts</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="bg-gray-900 text-white py-12 px-4 text-center">
+    <div class="text-5xl mb-3 brickbounce inline-block">🧱</div>
+    <h3 class="text-3xl font-extrabold mt-2">KARMAGIZH</h3>
+    <p class="caveat text-lg text-gray-400 mt-1">Creative Kid &bull; 3rd Grader &bull; Primrose Schools</p>
+    <p class="caveat text-gray-600 mt-6 text-sm">Made with 💛 by his awesome family</p>
+  </footer>
+
+</body>
+</html>
