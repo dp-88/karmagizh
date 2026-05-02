@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Karmagizh | Creative Kid</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&family=Caveat:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&family=Caveat:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
-    body { font-family: 'Baloo 2', cursive; background-color: #fffde7; }
+    body { font-family: 'Baloo 2', cursive; }
     .caveat { font-family: 'Caveat', cursive; }
+
+    .card { border: 3px solid #1f2937; box-shadow: 4px 4px 0 #1f2937; transition: transform 0.15s; }
+    .card:hover { transform: translateY(-4px); }
 
     @keyframes wiggle {
       0%, 100% { transform: rotate(-4deg); }
@@ -16,290 +19,278 @@
     }
     .wiggle { animation: wiggle 2.5s ease-in-out infinite; }
 
-    @keyframes buzz {
-      0%   { transform: translate(0,0) rotate(0deg); }
-      25%  { transform: translate(6px,-6px) rotate(20deg); }
-      50%  { transform: translate(-6px,4px) rotate(-15deg); }
-      75%  { transform: translate(4px,6px) rotate(10deg); }
-      100% { transform: translate(0,0) rotate(0deg); }
-    }
-    .buzz { animation: buzz 0.35s linear infinite; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); opacity: 0.5; }
-      50%       { transform: translateY(-12px); opacity: 1; }
-    }
-    .float1 { animation: float 2.2s ease-in-out infinite; }
-    .float2 { animation: float 2.8s ease-in-out infinite 0.4s; }
-    .float3 { animation: float 3.1s ease-in-out infinite 0.8s; }
-
     @keyframes brickbounce {
       0%, 100% { transform: translateY(0); }
       50%       { transform: translateY(-10px); }
     }
     .brickbounce { animation: brickbounce 1.8s ease-in-out infinite; }
 
-    .card {
-      border: 3px solid #1f2937;
-      box-shadow: 4px 4px 0 #1f2937;
-      transition: transform 0.15s;
-    }
-    .card:hover { transform: translateY(-4px); }
-
-    .fact-card {
-      border: 3px solid #1f2937;
-      box-shadow: 3px 3px 0 #1f2937;
+    @keyframes float-lego {
+      0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0;    }
+      8%   { opacity: 0.18; }
+      92%  { opacity: 0.18; }
+      100% { transform: translateY(-120px) rotate(540deg); opacity: 0; }
     }
 
-    /* nav underline */
+    @keyframes dance-move {
+      0%   { transform: rotate(-14deg) translateX(-5px); }
+      25%  { transform: rotate(9deg)  translateX(5px)  translateY(-10px); }
+      50%  { transform: rotate(14deg) translateX(7px); }
+      75%  { transform: rotate(-9deg) translateX(-5px) translateY(-5px); }
+      100% { transform: rotate(-14deg) translateX(-5px); }
+    }
+    .is-dancing { animation: dance-move 0.45s ease-in-out infinite !important; }
+
+    @keyframes bowl-pop {
+      0%, 100% { transform: scale(1) rotate(0); }
+      30%      { transform: scale(1.5) rotate(-18deg); }
+      60%      { transform: scale(1.4) rotate(12deg); }
+    }
+    .bowl-nom { animation: bowl-pop 0.55s ease-in-out; }
+
+    @keyframes note-fly {
+      0%   { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-80px) scale(0.3); opacity: 0; }
+    }
+    .note-fly { animation: note-fly 1s ease-out forwards; }
+
+    @keyframes count-pop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    .count-pop { animation: count-pop 0.25s ease-in-out; }
+
+    /* scroll reveal */
+    .reveal { opacity: 0; transform: translateY(35px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* speech bubble */
+    #speech-bubble {
+      position: absolute; top: -58px; right: -24px;
+      background: white; border: 3px solid #1f2937;
+      border-radius: 16px; padding: 8px 14px;
+      font-family: 'Caveat', cursive; font-size: 1.1rem; font-weight: 700;
+      white-space: nowrap; box-shadow: 3px 3px 0 #1f2937;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10;
+    }
+    #speech-bubble::after {
+      content: ''; position: absolute; bottom: -13px; left: 28px;
+      border: 7px solid transparent; border-top-color: #1f2937;
+    }
+    #speech-bubble.show { opacity: 1; }
+
+    /* lego builder cells */
+    .b-cell {
+      width: 40px; height: 40px; border-radius: 8px; cursor: pointer;
+      background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.18);
+      transition: all 0.12s; position: relative;
+    }
+    .b-cell:hover { border-color: #FF6B35; transform: scale(1.1); }
+    .b-cell.placed::after {
+      content: ''; position: absolute; top: 5px; left: 50%;
+      transform: translateX(-50%); width: 14px; height: 14px;
+      border-radius: 50%; background: rgba(255,255,255,0.3);
+    }
+
+    /* color picker */
+    .col-btn {
+      width: 34px; height: 34px; border-radius: 8px; cursor: pointer;
+      border: 3px solid transparent; transition: all 0.15s;
+    }
+    .col-btn:hover { transform: scale(1.2); }
+    .col-btn.sel { border-color: white; transform: scale(1.25); box-shadow: 0 0 0 3px rgba(255,255,255,0.35); }
+
+    /* nav */
     nav a { position: relative; }
     nav a::after {
-      content: '';
-      position: absolute; bottom: -2px; left: 0;
-      width: 0; height: 3px;
-      background: #1f2937;
-      transition: width 0.2s;
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 3px; background: #FF6B35; transition: width 0.2s;
     }
     nav a:hover::after { width: 100%; }
+
+    /* talk-o-meter words ticker */
+    @keyframes slide-word {
+      0%   { transform: translateX(100%); opacity: 0; }
+      10%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateX(-100%); opacity: 0; }
+    }
+    .word-ticker { animation: slide-word 3s linear forwards; }
   </style>
 </head>
 
-<body class="overflow-x-hidden text-gray-800">
+<body class="overflow-x-hidden bg-[#1E1E1E]">
 
-  <!-- ── NAV ── -->
+  <!-- FLOATING LEGO BG -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" id="lego-bg"></div>
+
+  <!-- NAV -->
   <nav class="sticky top-0 z-50 bg-gray-900 border-b-4 border-[#FF6B35] px-4 py-3 flex items-center justify-between">
-    <span class="font-extrabold text-xl tracking-tight text-[#FF6B35]">🧱 Karmagizh</span>
-    <div class="flex gap-5 caveat text-lg text-white">
+    <span class="font-extrabold text-lg sm:text-xl tracking-tight text-[#FF6B35]">🧱 Karmagizh</span>
+    <div class="flex gap-3 sm:gap-5 caveat text-sm sm:text-lg text-white">
       <a href="#about"    class="hover:text-[#FF6B35] font-bold transition-colors">About</a>
-      <a href="#hobbies"  class="hover:text-[#FF6B35] font-bold transition-colors">Hobbies</a>
-      <a href="#creations"class="hover:text-[#FF6B35] font-bold transition-colors">Creations</a>
-      <a href="#facts"    class="hover:text-[#FF6B35] font-bold transition-colors">Fun Facts</a>
+      <a href="#biryani"  class="hover:text-[#FF6B35] font-bold transition-colors">Biryani</a>
+      <a href="#lego"     class="hover:text-[#FF6B35] font-bold transition-colors">Lego</a>
+      <a href="#dance"    class="hover:text-[#FF6B35] font-bold transition-colors">Dance</a>
+      <a href="#talk"     class="hover:text-[#FF6B35] font-bold transition-colors">Talk</a>
     </div>
   </nav>
 
-  <!-- ── HERO ── -->
-  <section class="min-h-screen bg-[#1E1E1E] flex flex-col items-center justify-center px-4 py-16 relative overflow-hidden">
+  <!-- ══ HERO ══ -->
+  <section class="min-h-screen bg-[#1E1E1E] flex flex-col items-center justify-center px-4 py-16 relative overflow-hidden z-10">
 
-    <!-- bg lego bricks -->
-    <span class="absolute top-6  left-4  text-7xl opacity-10 select-none">🧱</span>
-    <span class="absolute top-24 right-6 text-6xl opacity-10 select-none">🧱</span>
-    <span class="absolute bottom-24 left-10 text-5xl opacity-10 select-none">🧱</span>
-    <span class="absolute bottom-8 right-8  text-7xl opacity-10 select-none">🧱</span>
-    <span class="absolute top-40 left-1/2 -translate-x-1/2 text-9xl opacity-5 select-none">🧱</span>
+    <!-- Avatar -->
+    <div class="relative wiggle mb-4 cursor-pointer select-none" onclick="tapAvatar()">
+      <p class="caveat text-gray-500 text-center text-sm mb-1 animate-pulse">👆 tap me!</p>
 
-    <!-- AVATAR -->
-    <div class="relative wiggle mb-6">
-      <svg width="210" height="225" viewBox="0 0 210 225" xmlns="http://www.w3.org/2000/svg">
-
-        <!-- HAIR BACK (base mass) -->
-        <ellipse cx="105" cy="78" rx="70" ry="55" fill="#3D1C02"/>
-
-        <!-- FACE -->
-        <ellipse cx="105" cy="118" rx="62" ry="65" fill="#FFCBA4"/>
-
-        <!-- EARS -->
-        <ellipse cx="43"  cy="116" rx="13" ry="16" fill="#FFCBA4"/>
-        <ellipse cx="167" cy="116" rx="13" ry="16" fill="#FFCBA4"/>
-        <ellipse cx="43"  cy="116" rx="7"  ry="10" fill="#E8A882"/>
-        <ellipse cx="167" cy="116" rx="7"  ry="10" fill="#E8A882"/>
-
-        <!-- ROSY CHEEKS (flushed from cold) -->
-        <ellipse cx="62"  cy="132" rx="22" ry="15" fill="#FF3333" opacity="0.45"/>
-        <ellipse cx="148" cy="132" rx="22" ry="15" fill="#FF3333" opacity="0.45"/>
-
-        <!-- LEFT EYE -->
-        <ellipse cx="78"  cy="108" rx="20" ry="20" fill="white"/>
-        <!-- watery eye -->
-        <ellipse cx="68"  cy="118" rx="6"  ry="3"  fill="#A8D8FF" opacity="0.65"/>
-        <circle  cx="80"  cy="110" r="13"           fill="#7B4A28"/>
-        <circle  cx="80"  cy="110" r="7"            fill="#1A0800"/>
-        <circle  cx="86"  cy="104" r="4"            fill="white"/>
-        <!-- drooping eyelid (half-closed, tired) -->
-        <path d="M58 108 Q78 94 98 108 Z" fill="#FFCBA4"/>
-
-        <!-- RIGHT EYE -->
-        <ellipse cx="132" cy="108" rx="20" ry="20" fill="white"/>
-        <!-- watery eye -->
-        <ellipse cx="142" cy="118" rx="6"  ry="3"  fill="#A8D8FF" opacity="0.65"/>
-        <circle  cx="134" cy="110" r="13"           fill="#7B4A28"/>
-        <circle  cx="134" cy="110" r="7"            fill="#1A0800"/>
-        <circle  cx="140" cy="104" r="4"            fill="white"/>
-        <!-- drooping eyelid (half-closed, tired) -->
-        <path d="M112 108 Q132 94 152 108 Z" fill="#FFCBA4"/>
-
-        <!-- EYEBROWS (droopy/worried - inner corners lower) -->
-        <path d="M60 85 Q75 90 92 94"   stroke="#3D1C02" stroke-width="5" fill="none" stroke-linecap="round"/>
-        <path d="M118 94 Q135 90 150 85" stroke="#3D1C02" stroke-width="5" fill="none" stroke-linecap="round"/>
-
-        <!-- NOSE (red from cold) -->
-        <ellipse cx="105" cy="125" rx="10" ry="8"  fill="#E53935"/>
-        <circle  cx="100" cy="127" r="3"            fill="#B71C1C" opacity="0.5"/>
-        <circle  cx="110" cy="127" r="3"            fill="#B71C1C" opacity="0.5"/>
-        <!-- shiny nose highlight -->
-        <ellipse cx="103" cy="122" rx="3"  ry="2"  fill="white" opacity="0.4"/>
-
-        <!-- SNOT DRIP -->
-        <path d="M102 132 Q100 142 103 150 Q107 142 108 132 Z" fill="#8BC34A" opacity="0.92"/>
-        <ellipse cx="105" cy="151" rx="4"  ry="3"  fill="#8BC34A" opacity="0.85"/>
-
-        <!-- TIRED MOUTH (small, unwell) -->
-        <path d="M84 154 Q105 162 126 154" fill="#1A0800"/>
-        <path d="M86 155 Q105 160 124 155" fill="#C0857A"/>
-
-        <!-- HAIR FRONT SPIKES (organic curved, drawn over top of face) -->
-        <path d="M48 80 C 44 62 50 40 56 28 C 62 40 66 62 64 80 Z" fill="#3D1C02"/>
-        <path d="M70 67 C 68 46 72 22 78 12 C 84 22 86 46 84 67 Z" fill="#3D1C02"/>
-        <path d="M92 60 C 90 36 96 10 105 2  C 114 10 120 36 118 60 Z" fill="#3D1C02"/>
-        <path d="M124 67 C 122 46 124 22 130 12 C 136 22 140 46 138 67 Z" fill="#3D1C02"/>
-        <path d="M144 80 C 142 62 146 40 152 28 C 158 40 162 62 158 80 Z" fill="#3D1C02"/>
-
-        <!-- FRECKLES -->
-        <circle cx="64"  cy="124" r="2.5" fill="#C07850" opacity="0.55"/>
-        <circle cx="57"  cy="130" r="2"   fill="#C07850" opacity="0.45"/>
-        <circle cx="146" cy="124" r="2.5" fill="#C07850" opacity="0.55"/>
-        <circle cx="153" cy="130" r="2"   fill="#C07850" opacity="0.45"/>
-
-        <!-- NECK -->
-        <rect x="90" y="178" width="30" height="22" rx="5" fill="#FFCBA4"/>
-
-        <!-- SHIRT (teal) -->
-        <path d="M18 215 Q46 196 90 192 L105 225 L120 192 Q164 196 192 215 L192 225 L18 225 Z" fill="#2ABCB4"/>
-        <path d="M90 192 Q105 202 120 192" stroke="#22A09A" stroke-width="2" fill="none"/>
-
-        <!-- Lego brick on shirt -->
-        <rect x="92" y="204" width="26" height="15" rx="2" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
-        <circle cx="99"  cy="202" r="4" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
-        <circle cx="111" cy="202" r="4" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
-
+      <svg width="180" height="200" viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- hair back -->
+        <ellipse cx="90" cy="65" rx="60" ry="50" fill="#1A0A00"/>
+        <!-- face -->
+        <ellipse cx="90" cy="115" rx="54" ry="62" fill="#FFCBA4"/>
+        <!-- ears -->
+        <ellipse cx="36" cy="112" rx="12" ry="15" fill="#FFCBA4"/>
+        <ellipse cx="144" cy="112" rx="12" ry="15" fill="#FFCBA4"/>
+        <ellipse cx="36" cy="112" rx="7"  ry="9"  fill="#E8A882"/>
+        <ellipse cx="144" cy="112" rx="7"  ry="9"  fill="#E8A882"/>
+        <!-- cheeks -->
+        <ellipse cx="52"  cy="128" rx="18" ry="11" fill="#FF9999" opacity="0.3"/>
+        <ellipse cx="128" cy="128" rx="18" ry="11" fill="#FF9999" opacity="0.3"/>
+        <!-- left eye -->
+        <ellipse cx="68" cy="105" rx="18" ry="18" fill="white"/>
+        <circle  cx="70" cy="107" r="12" fill="#7B4A28"/>
+        <circle  cx="70" cy="107" r="6"  fill="#1A0800"/>
+        <circle  cx="76" cy="101" r="4.5" fill="white"/>
+        <circle  cx="65" cy="113" r="2"  fill="white" opacity="0.45"/>
+        <!-- right eye -->
+        <ellipse cx="112" cy="105" rx="18" ry="18" fill="white"/>
+        <circle  cx="114" cy="107" r="12" fill="#7B4A28"/>
+        <circle  cx="114" cy="107" r="6"  fill="#1A0800"/>
+        <circle  cx="120" cy="101" r="4.5" fill="white"/>
+        <circle  cx="109" cy="113" r="2"  fill="white" opacity="0.45"/>
+        <!-- eyebrows -->
+        <path d="M52 88 Q68 80 82 87"  stroke="#1A0A00" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <path d="M98 87 Q112 80 128 88" stroke="#1A0A00" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <!-- nose -->
+        <ellipse cx="90" cy="122" rx="8" ry="6" fill="#E8A070"/>
+        <circle  cx="85" cy="124" r="2.5" fill="#C07850" opacity="0.5"/>
+        <circle  cx="95" cy="124" r="2.5" fill="#C07850" opacity="0.5"/>
+        <!-- big smile + teeth -->
+        <path d="M64 140 Q90 164 116 140" fill="#1A0800"/>
+        <path d="M67 141 Q90 161 113 141" fill="white"/>
+        <line x1="90"  y1="141" x2="90"  y2="158" stroke="#1A0800" stroke-width="1.5"/>
+        <line x1="78"  y1="143" x2="77"  y2="157" stroke="#1A0800" stroke-width="1.2"/>
+        <line x1="102" y1="143" x2="103" y2="157" stroke="#1A0800" stroke-width="1.2"/>
+        <!-- hair spikes -->
+        <path d="M38 72 C 35 54 40 32 46 20 C 52 32 56 54 54 72 Z" fill="#1A0A00"/>
+        <path d="M58 60 C 56 40 60 16 66  6 C 72 16 74 40 72 60 Z" fill="#1A0A00"/>
+        <path d="M78 54 C 76 32 82  8 90  1 C 98  8 104 32 102 54 Z" fill="#1A0A00"/>
+        <path d="M108 60 C 106 40 108 16 114 6 C 120 16 124 40 122 60 Z" fill="#1A0A00"/>
+        <path d="M126 72 C 124 54 128 32 134 20 C 140 32 145 54 142 72 Z" fill="#1A0A00"/>
+        <!-- freckles -->
+        <circle cx="58"  cy="120" r="2" fill="#C07850" opacity="0.5"/>
+        <circle cx="122" cy="120" r="2" fill="#C07850" opacity="0.5"/>
+        <!-- neck -->
+        <rect x="77" y="172" width="26" height="20" rx="4" fill="#FFCBA4"/>
+        <!-- shirt -->
+        <path d="M8 198 Q34 182 77 178 L90 200 L103 178 Q146 182 172 198 L172 200 L8 200 Z" fill="#FF6B35"/>
+        <!-- lego stud on shirt -->
+        <rect x="80" y="185" width="20" height="11" rx="2" fill="#1A0A00"/>
+        <circle cx="86" cy="183" r="3.5" fill="#1A0A00"/>
+        <circle cx="94" cy="183" r="3.5" fill="#1A0A00"/>
       </svg>
+
+      <div id="speech-bubble"></div>
     </div>
 
-    <!-- name -->
-    <h1 class="text-5xl sm:text-7xl font-extrabold text-center tracking-tight leading-tight text-[#FF6B35] drop-shadow-sm">
-      KARMAGIZH
-    </h1>
-
-    <!-- tagline -->
-    <p class="caveat text-2xl sm:text-3xl text-gray-300 mt-3 text-center">
-      Creative Kid &bull; 3rd Grader &bull; Lego Master 🧱
-    </p>
-
-    <!-- school badge -->
-    <div class="mt-6 bg-white rounded-full px-6 py-3 card caveat text-xl text-gray-800 inline-flex items-center gap-2">
+    <h1 class="text-5xl sm:text-7xl font-extrabold text-center tracking-tight text-[#FF6B35]">KARMAGIZH</h1>
+    <p class="caveat text-2xl sm:text-3xl text-gray-300 mt-3 text-center">2nd Grader &bull; Lego Master &bull; Biryani Boss 🍛</p>
+    <div class="mt-5 bg-gray-800 border-4 border-[#FF6B35] rounded-full px-6 py-3 caveat text-xl text-white inline-flex items-center gap-2">
       📍 Primrose Schools
     </div>
-
-    <div class="absolute bottom-8 caveat text-gray-400 text-lg animate-bounce select-none">
-      scroll down ↓
-    </div>
+    <div class="absolute bottom-8 caveat text-gray-500 text-lg animate-bounce select-none">scroll down ↓</div>
   </section>
 
-  <!-- ── ABOUT ── -->
+  <!-- ══ ABOUT ══ -->
   <section class="py-16 px-4 bg-[#C1121F]" id="about">
     <div class="max-w-3xl mx-auto">
-      <h2 class="text-4xl font-extrabold text-center mb-1 text-white">👋 About Me</h2>
-      <p class="caveat text-center text-red-100 text-xl mb-10">the important stuff</p>
+      <h2 class="text-4xl font-extrabold text-center mb-1 text-white reveal">👋 About Me</h2>
+      <p class="caveat text-center text-red-100 text-xl mb-10 reveal">the important stuff</p>
 
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <div class="bg-white rounded-2xl p-4 text-center card">
+        <div class="bg-white rounded-2xl p-4 text-center card reveal">
           <div class="text-4xl mb-2">🎓</div>
           <div class="font-bold text-xs uppercase tracking-wide text-gray-500">Grade</div>
-          <div class="caveat text-xl font-bold">3rd Standard</div>
+          <div class="caveat text-xl font-bold">2nd Grade</div>
         </div>
-        <div class="bg-white rounded-2xl p-4 text-center card">
-          <div class="text-4xl mb-2">💛</div>
-          <div class="font-bold text-xs uppercase tracking-wide text-gray-500">Fav Color</div>
-          <div class="caveat text-xl font-bold">Yellow!</div>
-        </div>
-        <div class="bg-white rounded-2xl p-4 text-center card">
+        <div class="bg-white rounded-2xl p-4 text-center card reveal">
           <div class="text-4xl mb-2 brickbounce inline-block">🧱</div>
           <div class="font-bold text-xs uppercase tracking-wide text-gray-500">Superpower</div>
-          <div class="caveat text-xl font-bold">Lego Building</div>
+          <div class="caveat text-xl font-bold">Lego!</div>
         </div>
-        <div class="bg-white rounded-2xl p-4 text-center card">
+        <div class="bg-white rounded-2xl p-4 text-center card reveal">
+          <div class="text-4xl mb-2">🍛</div>
+          <div class="font-bold text-xs uppercase tracking-wide text-gray-500">Fav Food</div>
+          <div class="caveat text-xl font-bold">Biryani!!</div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 text-center card reveal">
           <div class="text-4xl mb-2">🏫</div>
           <div class="font-bold text-xs uppercase tracking-wide text-gray-500">School</div>
           <div class="caveat text-xl font-bold">Primrose</div>
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl p-6 card">
+      <div class="bg-white rounded-2xl p-6 card reveal">
         <p class="caveat text-2xl text-center text-gray-700 leading-relaxed">
-          "Hi! I'm Karmagizh. I love building epic things with Lego and using my imagination.
-          I go to Primrose Schools and I'm in 3rd grade.
-          Baths are optional. Creativity is not." 😄
+          "I build Lego, eat biryani, dance like nobody's watching, and I NEVER stop talking.
+          Baths are optional. Fun is mandatory!" 😄
         </p>
       </div>
 
-      <!-- Lego Optimus Karmagizh -->
-      <div class="mt-10 flex flex-col items-center">
+      <!-- Optimus Karmagizh -->
+      <div class="mt-10 flex flex-col items-center reveal">
         <div class="brickbounce inline-block">
           <svg width="200" height="318" viewBox="0 0 200 318" xmlns="http://www.w3.org/2000/svg">
-
-            <!-- antennae -->
             <line x1="80" y1="18" x2="65" y2="3"  stroke="#1f2937" stroke-width="4" stroke-linecap="round"/>
             <line x1="120" y1="18" x2="135" y2="3" stroke="#1f2937" stroke-width="4" stroke-linecap="round"/>
             <circle cx="65"  cy="3" r="5" fill="#E53935" stroke="#1f2937" stroke-width="1.5"/>
             <circle cx="135" cy="3" r="5" fill="#E53935" stroke="#1f2937" stroke-width="1.5"/>
-
-            <!-- HEAD side panels -->
             <rect x="44" y="20" width="20" height="48" rx="4" fill="#E53935" stroke="#1f2937" stroke-width="2.5"/>
             <rect x="136" y="20" width="20" height="48" rx="4" fill="#E53935" stroke="#1f2937" stroke-width="2.5"/>
-
-            <!-- HEAD main block -->
             <rect x="62" y="12" width="76" height="70" rx="5" fill="#FF6B35" stroke="#1f2937" stroke-width="3"/>
-            <!-- head top studs -->
             <circle cx="81"  cy="16" r="5" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
             <circle cx="100" cy="16" r="5" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
             <circle cx="119" cy="16" r="5" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
-
-            <!-- eyes -->
             <rect x="68" y="24" width="24" height="16" rx="3" fill="#60CFFF" stroke="#1f2937" stroke-width="2"/>
             <rect x="108" y="24" width="24" height="16" rx="3" fill="#60CFFF" stroke="#1f2937" stroke-width="2"/>
             <rect x="72" y="27" width="16" height="10" rx="2" fill="white" opacity="0.7"/>
             <rect x="112" y="27" width="16" height="10" rx="2" fill="white" opacity="0.7"/>
-
-            <!-- face mask -->
             <rect x="66" y="46" width="68" height="32" rx="4" fill="#1E88E5" stroke="#1f2937" stroke-width="2"/>
             <line x1="72" y1="53" x2="128" y2="53" stroke="#1f2937" stroke-width="1.5"/>
             <line x1="72" y1="59" x2="128" y2="59" stroke="#1f2937" stroke-width="1.5"/>
             <line x1="72" y1="65" x2="128" y2="65" stroke="#1f2937" stroke-width="1.5"/>
             <line x1="72" y1="71" x2="128" y2="71" stroke="#1f2937" stroke-width="1.5"/>
-
-            <!-- NECK -->
             <rect x="87" y="82" width="26" height="16" rx="3" fill="#FF6B35" stroke="#1f2937" stroke-width="2.5"/>
-
-            <!-- SHOULDER PADS -->
             <rect x="10" y="88" width="52" height="22" rx="5" fill="#E53935" stroke="#1f2937" stroke-width="2.5"/>
             <rect x="138" y="88" width="52" height="22" rx="5" fill="#E53935" stroke="#1f2937" stroke-width="2.5"/>
             <circle cx="25"  cy="92" r="4" fill="#E53935" stroke="#1f2937" stroke-width="1.5"/>
             <circle cx="42"  cy="92" r="4" fill="#E53935" stroke="#1f2937" stroke-width="1.5"/>
             <circle cx="158" cy="92" r="4" fill="#E53935" stroke="#1f2937" stroke-width="1.5"/>
             <circle cx="175" cy="92" r="4" fill="#E53935" stroke="#1f2937" stroke-width="1.5"/>
-
-            <!-- CHEST -->
             <rect x="44" y="98" width="112" height="78" rx="5" fill="#FF6B35" stroke="#1f2937" stroke-width="3"/>
             <line x1="100" y1="98" x2="100" y2="176" stroke="#1f2937" stroke-width="2"/>
-            <!-- chest studs -->
             <circle cx="58"  cy="102" r="4" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
             <circle cx="78"  cy="102" r="4" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
             <circle cx="122" cy="102" r="4" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
             <circle cx="142" cy="102" r="4" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
-            <!-- Autobot badge (simplified) -->
             <polygon points="100,110 111,120 124,116 119,128 100,134 81,128 76,116 89,120" fill="#E53935" stroke="#1f2937" stroke-width="1.5"/>
-            <!-- chest windows -->
             <rect x="52" y="148" width="36" height="22" rx="3" fill="#1E88E5" stroke="#1f2937" stroke-width="2"/>
             <rect x="112" y="148" width="36" height="22" rx="3" fill="#1E88E5" stroke="#1f2937" stroke-width="2"/>
-
-            <!-- UPPER ARMS -->
             <rect x="12" y="108" width="33" height="62" rx="5" fill="#FF6B35" stroke="#1f2937" stroke-width="2.5"/>
             <rect x="155" y="108" width="33" height="62" rx="5" fill="#FF6B35" stroke="#1f2937" stroke-width="2.5"/>
-
-            <!-- FOREARMS -->
             <rect x="10" y="170" width="34" height="52" rx="5" fill="#E53935" stroke="#1f2937" stroke-width="2.5"/>
             <rect x="156" y="170" width="34" height="52" rx="5" fill="#E53935" stroke="#1f2937" stroke-width="2.5"/>
-
-            <!-- FISTS -->
             <rect x="8"   y="220" width="38" height="28" rx="5" fill="#FF6B35" stroke="#1f2937" stroke-width="2.5"/>
             <rect x="154" y="220" width="38" height="28" rx="5" fill="#FF6B35" stroke="#1f2937" stroke-width="2.5"/>
             <line x1="20"  y1="228" x2="20"  y2="240" stroke="#1f2937" stroke-width="1.5"/>
@@ -308,25 +299,16 @@
             <line x1="162" y1="228" x2="162" y2="240" stroke="#1f2937" stroke-width="1.5"/>
             <line x1="171" y1="228" x2="171" y2="240" stroke="#1f2937" stroke-width="1.5"/>
             <line x1="180" y1="228" x2="180" y2="240" stroke="#1f2937" stroke-width="1.5"/>
-
-            <!-- WAIST -->
             <rect x="56" y="176" width="88" height="26" rx="4" fill="#1E88E5" stroke="#1f2937" stroke-width="2.5"/>
             <rect x="87" y="180" width="26" height="18" rx="3" fill="#FF6B35" stroke="#1f2937" stroke-width="2"/>
-
-            <!-- UPPER LEGS -->
             <rect x="56" y="202" width="38" height="52" rx="5" fill="#FF6B35" stroke="#1f2937" stroke-width="2.5"/>
             <rect x="106" y="202" width="38" height="52" rx="5" fill="#FF6B35" stroke="#1f2937" stroke-width="2.5"/>
             <circle cx="75"  cy="206" r="4" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
             <circle cx="125" cy="206" r="4" fill="#FF6B35" stroke="#1f2937" stroke-width="1.5"/>
-
-            <!-- LOWER LEGS -->
             <rect x="53" y="254" width="42" height="46" rx="5" fill="#E53935" stroke="#1f2937" stroke-width="2.5"/>
             <rect x="105" y="254" width="42" height="46" rx="5" fill="#E53935" stroke="#1f2937" stroke-width="2.5"/>
-
-            <!-- FEET -->
-            <rect x="46" y="294" width="56" height="20" rx="4" fill="#1f2937" stroke="#1f2937" stroke-width="1"/>
-            <rect x="98" y="294" width="56" height="20" rx="4" fill="#1f2937" stroke="#1f2937" stroke-width="1"/>
-
+            <rect x="46" y="294" width="56" height="20" rx="4" fill="#1f2937"/>
+            <rect x="98" y="294" width="56" height="20" rx="4" fill="#1f2937"/>
           </svg>
         </div>
         <p class="caveat text-2xl font-bold text-white mt-1 tracking-wide">⚡ OPTIMUS KARMAGIZH</p>
@@ -335,61 +317,174 @@
     </div>
   </section>
 
-  <!-- ── HOBBIES ── -->
-  <section class="py-16 px-4 bg-[#023E8A]" id="hobbies">
-    <div class="max-w-3xl mx-auto">
-      <h2 class="text-4xl font-extrabold text-center mb-1 text-white">🎮 What I Love</h2>
-      <p class="caveat text-center text-blue-200 text-xl mb-10">my top interests</p>
+  <!-- ══ BIRYANI ══ -->
+  <section class="py-16 px-4 bg-[#BF360C]" id="biryani">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="text-4xl font-extrabold text-white mb-1 reveal">🍛 Biryani Fan Club</h2>
+      <p class="caveat text-orange-100 text-xl mb-10 reveal">warning: professional biryani destroyer</p>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div class="bg-white rounded-2xl p-6 text-center card">
-          <div class="text-6xl mb-4 brickbounce inline-block">🧱</div>
-          <h3 class="text-xl font-extrabold">Lego Building</h3>
-          <p class="caveat text-gray-500 mt-2 text-lg">One brick at a time — world domination</p>
+      <div class="reveal">
+        <div id="biryani-bowl" class="text-9xl mb-4 inline-block cursor-pointer select-none" onclick="eatBiryani()">🍛</div>
+        <p class="caveat text-orange-100 text-xl mb-6">👆 TAP THE BOWL!</p>
+      </div>
+
+      <div class="bg-white rounded-3xl p-8 card reveal">
+        <p class="text-6xl font-extrabold text-[#BF360C]" id="biryani-count">0</p>
+        <p class="caveat text-2xl text-gray-500 mt-1">bowls eaten today</p>
+        <p class="caveat text-xl text-[#FF6B35] mt-3 font-bold min-h-[2rem]" id="biryani-msg">Tap the bowl to start eating!</p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4 mt-8">
+        <div class="bg-white/10 rounded-2xl p-4 text-center border-2 border-white/20 reveal">
+          <div class="text-4xl mb-2">🏆</div>
+          <div class="caveat text-white text-lg">World Record<br/>Holder</div>
         </div>
-        <div class="bg-white rounded-2xl p-6 text-center card">
-          <div class="text-6xl mb-4">🎨</div>
-          <h3 class="text-xl font-extrabold">Being Creative</h3>
-          <p class="caveat text-gray-500 mt-2 text-lg">Making stuff nobody has made before</p>
+        <div class="bg-white/10 rounded-2xl p-4 text-center border-2 border-white/20 reveal">
+          <div class="text-4xl mb-2">🌶️</div>
+          <div class="caveat text-white text-lg">Extra Spicy<br/>Please!</div>
         </div>
-        <div class="bg-white rounded-2xl p-6 text-center card">
-          <div class="text-6xl mb-4">🌟</div>
-          <h3 class="text-xl font-extrabold">Just Chilling</h3>
-          <p class="caveat text-gray-500 mt-2 text-lg">Avoiding baths is a full-time hobby 😂</p>
+        <div class="bg-white/10 rounded-2xl p-4 text-center border-2 border-white/20 reveal">
+          <div class="text-4xl mb-2">😤</div>
+          <div class="caveat text-white text-lg">Biryani<br/>Connoisseur</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── CREATIONS ── -->
+  <!-- ══ LEGO BUILDER ══ -->
+  <section class="py-16 px-4 bg-[#0D47A1]" id="lego">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="text-4xl font-extrabold text-white mb-1 reveal">🧱 Lego Builder</h2>
+      <p class="caveat text-blue-200 text-xl mb-8 reveal">pick a colour and build something!</p>
+
+      <!-- colour picker -->
+      <div class="flex justify-center gap-3 mb-6 flex-wrap reveal" id="color-picker">
+        <div class="col-btn sel" style="background:#E53935" onclick="pickColor('#E53935',this)" title="Red"></div>
+        <div class="col-btn"    style="background:#1E88E5" onclick="pickColor('#1E88E5',this)" title="Blue"></div>
+        <div class="col-btn"    style="background:#43A047" onclick="pickColor('#43A047',this)" title="Green"></div>
+        <div class="col-btn"    style="background:#F9A825" onclick="pickColor('#F9A825',this)" title="Yellow"></div>
+        <div class="col-btn"    style="background:#FF6B35" onclick="pickColor('#FF6B35',this)" title="Orange"></div>
+        <div class="col-btn"    style="background:#8E24AA" onclick="pickColor('#8E24AA',this)" title="Purple"></div>
+        <div class="col-btn"    style="background:#FFFFFF" onclick="pickColor('#FFFFFF',this)" title="White" style="background:white;border:2px solid rgba(255,255,255,0.4)"></div>
+      </div>
+
+      <!-- grid -->
+      <div class="inline-grid gap-1 mb-6 reveal" id="lego-grid" style="grid-template-columns: repeat(9, 40px)"></div>
+
+      <!-- controls -->
+      <div class="flex justify-center gap-4 mb-4 reveal">
+        <button onclick="clearBuild()" class="bg-white/20 hover:bg-white/30 text-white font-bold px-6 py-3 rounded-xl caveat text-xl transition-colors border-2 border-white/30">
+          🗑️ Clear
+        </button>
+        <div class="bg-white rounded-xl px-6 py-3 font-bold text-[#0D47A1] text-xl caveat">
+          🧱 <span id="brick-count">0</span> bricks
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DANCE FLOOR ══ -->
+  <section class="py-16 px-4 bg-[#4A148C]" id="dance">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="text-4xl font-extrabold text-white mb-1 reveal">💃 Dance Floor</h2>
+      <p class="caveat text-purple-200 text-xl mb-8 reveal">karmagizh never stops dancing!</p>
+
+      <div class="relative inline-block reveal" id="dance-area">
+        <!-- dancing avatar -->
+        <div id="dance-fig" class="text-8xl sm:text-9xl inline-block select-none mb-6">🕺</div>
+
+        <!-- music notes spawn here -->
+      </div>
+
+      <br/>
+      <button id="dance-btn" onclick="toggleDance()"
+        class="mt-4 text-white font-extrabold text-2xl px-10 py-4 rounded-2xl caveat border-4 border-white/40 hover:scale-105 transition-transform reveal"
+        style="background:#7B1FA2">
+        💃 Dance!
+      </button>
+
+      <div class="grid grid-cols-3 gap-4 mt-10">
+        <div class="bg-white/10 rounded-2xl p-4 text-center border-2 border-white/20 reveal">
+          <div class="text-4xl mb-2">🎵</div>
+          <div class="caveat text-white text-lg">Dances<br/>Everywhere</div>
+        </div>
+        <div class="bg-white/10 rounded-2xl p-4 text-center border-2 border-white/20 reveal">
+          <div class="text-4xl mb-2">🕺</div>
+          <div class="caveat text-white text-lg">Signature<br/>Move: Chaos</div>
+        </div>
+        <div class="bg-white/10 rounded-2xl p-4 text-center border-2 border-white/20 reveal">
+          <div class="text-4xl mb-2">🎤</div>
+          <div class="caveat text-white text-lg">Dances &amp;<br/>Sings Too</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ TALK-O-METER ══ -->
+  <section class="py-16 px-4 bg-[#006064]" id="talk">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="text-4xl font-extrabold text-white mb-1 reveal">🗣️ Talk-O-Meter</h2>
+      <p class="caveat text-teal-200 text-xl mb-10 reveal">words spoken by karmagizh today (and counting...)</p>
+
+      <div class="bg-white rounded-3xl p-8 card mb-8 reveal">
+        <p class="text-6xl sm:text-7xl font-extrabold text-[#006064] tabular-nums" id="word-count">8,547</p>
+        <p class="caveat text-2xl text-gray-500 mt-2">words today 📢</p>
+        <div class="mt-4 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div class="h-full bg-[#00838F] rounded-full animate-pulse" style="width:78%"></div>
+        </div>
+        <p class="caveat text-gray-400 mt-2">conversation battery: 78% remaining</p>
+      </div>
+
+      <!-- scrolling quotes ticker -->
+      <div class="bg-white/10 rounded-2xl p-4 border-2 border-white/20 overflow-hidden relative h-14 reveal">
+        <p class="caveat text-white text-xl absolute inset-0 flex items-center justify-center" id="talk-ticker"></p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4 mt-6">
+        <div class="bg-white/10 rounded-2xl p-4 text-center border-2 border-white/20 reveal">
+          <div class="text-3xl mb-2">📞</div>
+          <div class="caveat text-white">Talks in<br/>his sleep</div>
+        </div>
+        <div class="bg-white/10 rounded-2xl p-4 text-center border-2 border-white/20 reveal">
+          <div class="text-3xl mb-2">🦜</div>
+          <div class="caveat text-white">Volume:<br/>Always MAX</div>
+        </div>
+        <div class="bg-white/10 rounded-2xl p-4 text-center border-2 border-white/20 reveal">
+          <div class="text-3xl mb-2">💬</div>
+          <div class="caveat text-white">Topic:<br/>Everything</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CREATIONS ══ -->
   <section class="py-16 px-4 bg-[#1B4332]" id="creations">
     <div class="max-w-3xl mx-auto">
-      <h2 class="text-4xl font-extrabold text-center mb-1 text-white">🖼️ My Creations</h2>
-      <p class="caveat text-center text-green-200 text-xl mb-10">things I made — more dropping soon!</p>
+      <h2 class="text-4xl font-extrabold text-center mb-1 text-white reveal">🖼️ My Creations</h2>
+      <p class="caveat text-center text-green-200 text-xl mb-10 reveal">dropping soon — watch this space!</p>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <!-- placeholders — swap src with real images when ready -->
-        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-500 hover:bg-green-50 transition-colors cursor-pointer">
-          <div class="text-4xl mb-2">🖼️</div>
-          <p class="caveat text-base text-center px-2">Artwork<br/>coming soon!</p>
-        </div>
-        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-500 hover:bg-green-50 transition-colors cursor-pointer">
+        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-400 hover:bg-green-50 transition-colors cursor-pointer reveal">
           <div class="text-4xl mb-2">🧱</div>
           <p class="caveat text-base text-center px-2">Lego build<br/>coming soon!</p>
         </div>
-        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-500 hover:bg-green-50 transition-colors cursor-pointer">
+        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-400 hover:bg-green-50 transition-colors cursor-pointer reveal">
+          <div class="text-4xl mb-2">🎨</div>
+          <p class="caveat text-base text-center px-2">Artwork<br/>coming soon!</p>
+        </div>
+        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-400 hover:bg-green-50 transition-colors cursor-pointer reveal">
           <div class="text-4xl mb-2">✏️</div>
           <p class="caveat text-base text-center px-2">Drawing<br/>coming soon!</p>
         </div>
-        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-500 hover:bg-green-50 transition-colors cursor-pointer">
-          <div class="text-4xl mb-2">🌈</div>
-          <p class="caveat text-base text-center px-2">Something<br/>cool!</p>
+        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-400 hover:bg-green-50 transition-colors cursor-pointer reveal">
+          <div class="text-4xl mb-2">🍛</div>
+          <p class="caveat text-base text-center px-2">Biryani art<br/>coming soon!</p>
         </div>
-        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-500 hover:bg-green-50 transition-colors cursor-pointer">
-          <div class="text-4xl mb-2">🚀</div>
-          <p class="caveat text-base text-center px-2">Surprise<br/>creation!</p>
+        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-400 hover:bg-green-50 transition-colors cursor-pointer reveal">
+          <div class="text-4xl mb-2">💃</div>
+          <p class="caveat text-base text-center px-2">Dance video<br/>coming soon!</p>
         </div>
-        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-500 hover:bg-green-50 transition-colors cursor-pointer">
+        <div class="aspect-square bg-white rounded-2xl border-4 border-dashed border-green-400 flex flex-col items-center justify-center text-gray-400 hover:bg-green-50 transition-colors cursor-pointer reveal">
           <div class="text-4xl mb-2">⭐</div>
           <p class="caveat text-base text-center px-2">Watch<br/>this space!</p>
         </div>
@@ -397,44 +492,176 @@
     </div>
   </section>
 
-  <!-- ── FUN FACTS ── -->
+  <!-- ══ FUN FACTS ══ -->
   <section class="py-16 px-4 bg-[#5A189A]" id="facts">
     <div class="max-w-2xl mx-auto">
-      <h2 class="text-4xl font-extrabold text-center mb-1 text-white">⚡ Fun Facts</h2>
-      <p class="caveat text-center text-purple-200 text-xl mb-10">things you should know about me</p>
-
+      <h2 class="text-4xl font-extrabold text-center mb-1 text-white reveal">⚡ Fun Facts</h2>
+      <p class="caveat text-center text-purple-200 text-xl mb-10 reveal">things you should know about me</p>
       <div class="space-y-4">
-        <div class="bg-white rounded-2xl px-6 py-4 fact-card flex items-center gap-4">
-          <span class="text-3xl shrink-0">🧱</span>
-          <p class="caveat text-xl">I can build Lego for hours without stopping</p>
-        </div>
-        <div class="bg-white rounded-2xl px-6 py-4 fact-card flex items-center gap-4">
-          <span class="text-3xl shrink-0">💛</span>
-          <p class="caveat text-xl">Yellow is the best color. No debate.</p>
-        </div>
-        <div class="bg-white rounded-2xl px-6 py-4 fact-card flex items-center gap-4">
-          <span class="text-3xl shrink-0">🚿</span>
-          <p class="caveat text-xl">Baths? Never heard of them. 😂</p>
-        </div>
-        <div class="bg-white rounded-2xl px-6 py-4 fact-card flex items-center gap-4">
-          <span class="text-3xl shrink-0">🏫</span>
-          <p class="caveat text-xl">Primrose Schools is where the magic happens</p>
-        </div>
-        <div class="bg-white rounded-2xl px-6 py-4 fact-card flex items-center gap-4">
-          <span class="text-3xl shrink-0">🎨</span>
-          <p class="caveat text-xl">Creativity level: completely off the charts</p>
-        </div>
+        <div class="bg-white rounded-2xl px-6 py-4 card flex items-center gap-4 reveal"><span class="text-3xl shrink-0">🧱</span><p class="caveat text-xl">Can build Lego for hours without stopping</p></div>
+        <div class="bg-white rounded-2xl px-6 py-4 card flex items-center gap-4 reveal"><span class="text-3xl shrink-0">🍛</span><p class="caveat text-xl">Biryani is not just food — it's a lifestyle</p></div>
+        <div class="bg-white rounded-2xl px-6 py-4 card flex items-center gap-4 reveal"><span class="text-3xl shrink-0">💃</span><p class="caveat text-xl">Spontaneous dancing — anytime, anywhere</p></div>
+        <div class="bg-white rounded-2xl px-6 py-4 card flex items-center gap-4 reveal"><span class="text-3xl shrink-0">🗣️</span><p class="caveat text-xl">Has NEVER run out of things to say. Ever.</p></div>
+        <div class="bg-white rounded-2xl px-6 py-4 card flex items-center gap-4 reveal"><span class="text-3xl shrink-0">🚿</span><p class="caveat text-xl">Baths? We don't talk about baths. 😂</p></div>
+        <div class="bg-white rounded-2xl px-6 py-4 card flex items-center gap-4 reveal"><span class="text-3xl shrink-0">🏫</span><p class="caveat text-xl">Primrose Schools is where the magic happens</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ── FOOTER ── -->
+  <!-- FOOTER -->
   <footer class="bg-gray-900 text-white py-12 px-4 text-center">
     <div class="text-5xl mb-3 brickbounce inline-block">🧱</div>
-    <h3 class="text-3xl font-extrabold mt-2">KARMAGIZH</h3>
-    <p class="caveat text-lg text-gray-400 mt-1">Creative Kid &bull; 3rd Grader &bull; Primrose Schools</p>
-    <p class="caveat text-gray-400 mt-6 text-sm">Made with 💛 by his awesome brother Elan.D.A</p>
+    <h3 class="text-3xl font-extrabold mt-2 text-[#FF6B35]">KARMAGIZH</h3>
+    <p class="caveat text-lg text-gray-400 mt-1">2nd Grader &bull; Lego Master &bull; Biryani Boss &bull; Primrose Schools</p>
+    <p class="caveat text-gray-600 mt-6 text-sm">Made with 💛 by his awesome brother Elan.D.A</p>
   </footer>
 
+  <script>
+    /* ── FLOATING LEGO BG ── */
+    const bg = document.getElementById('lego-bg');
+    const icons = ['🧱','🟥','🟦','🟨','🟩','🟧'];
+    for (let i = 0; i < 18; i++) {
+      const s = document.createElement('span');
+      const size = Math.random() * 22 + 14;
+      s.style.cssText = `position:absolute;font-size:${size}px;left:${Math.random()*100}%;
+        animation:float-lego ${Math.random()*10+12}s linear ${Math.random()*12}s infinite;`;
+      s.textContent = icons[Math.floor(Math.random() * icons.length)];
+      bg.appendChild(s);
+    }
+
+    /* ── AVATAR TAP ── */
+    const bubbles = [
+      "Hi! I'm Karmagizh! 😄",
+      "Can I have biryani? 🍛",
+      "Let's build Lego! 🧱",
+      "Watch me dance! 💃",
+      "Did I tell you about…? 🗣️",
+      "MORE BIRYANI!! 🍛🍛",
+      "I'm the Lego champion! 🏆",
+      "Never gonna stop talking! 😂",
+      "One more bowl please!! 🍛",
+    ];
+    let bIdx = 0;
+    function tapAvatar() {
+      const sb = document.getElementById('speech-bubble');
+      sb.textContent = bubbles[bIdx++ % bubbles.length];
+      sb.classList.add('show');
+      clearTimeout(sb._t);
+      sb._t = setTimeout(() => sb.classList.remove('show'), 2200);
+    }
+
+    /* ── BIRYANI ── */
+    let biryaniCount = 0;
+    const msgs = ['Yummy! 😋','More more more! 🍛','BIRYANI POWER! 💪','Om nom nom! 😤','So delicious! 🤤','Best food EVER! 👑','Level up! 🎮','Saffron perfection! 🌟'];
+    function eatBiryani() {
+      biryaniCount++;
+      document.getElementById('biryani-count').textContent = biryaniCount;
+      const bowl = document.getElementById('biryani-bowl');
+      bowl.classList.remove('bowl-nom'); void bowl.offsetWidth; bowl.classList.add('bowl-nom');
+      const msg = biryaniCount % 10 === 0
+        ? `${biryaniCount} bowls!! LEGEND!! 🏆🍛`
+        : biryaniCount % 5 === 0
+          ? `${biryaniCount} bowls! You beast! 🔥`
+          : msgs[Math.floor(Math.random() * msgs.length)];
+      document.getElementById('biryani-msg').textContent = msg;
+    }
+
+    /* ── LEGO BUILDER ── */
+    let selColor = '#E53935';
+    let brickCount = 0;
+    const grid = document.getElementById('lego-grid');
+    for (let i = 0; i < 54; i++) {
+      const c = document.createElement('div');
+      c.className = 'b-cell';
+      c.onclick = () => {
+        if (c.dataset.filled) {
+          c.dataset.filled = '';
+          c.style.background = 'rgba(255,255,255,0.08)';
+          c.classList.remove('placed');
+          brickCount--;
+        } else {
+          c.dataset.filled = '1';
+          c.style.background = selColor;
+          c.classList.add('placed');
+          brickCount++;
+        }
+        document.getElementById('brick-count').textContent = brickCount;
+      };
+      grid.appendChild(c);
+    }
+    function pickColor(color, btn) {
+      selColor = color;
+      document.querySelectorAll('.col-btn').forEach(b => b.classList.remove('sel'));
+      btn.classList.add('sel');
+    }
+    function clearBuild() {
+      document.querySelectorAll('.b-cell').forEach(c => {
+        c.dataset.filled = ''; c.style.background = 'rgba(255,255,255,0.08)'; c.classList.remove('placed');
+      });
+      brickCount = 0; document.getElementById('brick-count').textContent = 0;
+    }
+
+    /* ── DANCE ── */
+    let isDancing = false, noteInt;
+    function toggleDance() {
+      isDancing = !isDancing;
+      const fig = document.getElementById('dance-fig');
+      const btn = document.getElementById('dance-btn');
+      if (isDancing) {
+        fig.classList.add('is-dancing');
+        btn.textContent = '🛑 Stop!';
+        btn.style.background = '#880E4F';
+        noteInt = setInterval(() => {
+          if (!isDancing) { clearInterval(noteInt); return; }
+          const n = document.createElement('span');
+          n.className = 'note-fly absolute text-2xl pointer-events-none';
+          n.style.cssText = `left:${Math.random()*80+10}%;bottom:40%;position:absolute;`;
+          n.textContent = ['🎵','🎶','🎤','⭐','✨'][Math.floor(Math.random()*5)];
+          document.getElementById('dance-area').appendChild(n);
+          setTimeout(() => n.remove(), 1100);
+        }, 280);
+      } else {
+        fig.classList.remove('is-dancing');
+        btn.textContent = '💃 Dance!';
+        btn.style.background = '#7B1FA2';
+        clearInterval(noteInt);
+      }
+    }
+
+    /* ── TALK-O-METER ── */
+    let wc = 8547;
+    setInterval(() => {
+      wc += Math.floor(Math.random() * 5) + 1;
+      const el = document.getElementById('word-count');
+      if (el) el.textContent = wc.toLocaleString();
+    }, 650);
+
+    const quotes = [
+      '"Did you know that Lego has more pieces than..."',
+      '"Can I have biryani for breakfast too?"',
+      '"Wait wait wait, let me tell you something..."',
+      '"So anyway, the Lego instruction said..."',
+      '"I was thinking, what if we built a..."',
+      '"One more thing! One more thing!"',
+      '"The biryani today was AMAZING but yesterday\'s..."',
+      '"Can I have biryani? Can I? Can I? Can I?"',
+    ];
+    let qIdx = 0;
+    function rotateTicker() {
+      const el = document.getElementById('talk-ticker');
+      if (!el) return;
+      el.style.animation = 'none'; void el.offsetWidth;
+      el.textContent = quotes[qIdx++ % quotes.length];
+      el.style.animation = 'word-ticker 3.5s linear';
+      setTimeout(rotateTicker, 3600);
+    }
+    setTimeout(rotateTicker, 500);
+
+    /* ── SCROLL REVEAL ── */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
 </body>
 </html>
